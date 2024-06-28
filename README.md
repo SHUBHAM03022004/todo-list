@@ -34,7 +34,7 @@ This project allows users to create, edit, delete, and mark todos as completed. 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/SHUBHAM03022004/todo-list
+   git clone https://github.com/SHUBHAM03022004/todo-list.git
    cd todo-list
    npm install
    npm run dev
