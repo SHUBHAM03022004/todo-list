@@ -11,6 +11,7 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentTodoIndex, setCurrentTodoIndex] = useState(null);
 
+  // Function to check if a title is already used (case insensitive)
   const isDuplicateTitle = (title) => {
     const lowerCaseTitle = title.toLowerCase();
     return allTodos.some(
@@ -19,7 +20,7 @@ function App() {
     );
   };
   
-
+  // Function to handle adding a new todo
   const handleAddTodo = () => {
     if (newTitle.trim() === "" || newDescription.trim() === "") {
       alert("Title or description cannot be empty.");
@@ -37,13 +38,17 @@ function App() {
       isCompleted: false,
     };
 
+    // Update state with new todo item
     const updatedTodoArr = [...allTodos, newTodoItem];
     setTodos(updatedTodoArr);
+    // Update local storage with new todos
     localStorage.setItem("todolist", JSON.stringify(updatedTodoArr));
+    // Clear input fields after adding todo
     setNewTitle("");
     setNewDescription("");
   };
 
+  // Function to handle editing an existing todo
   const handleEditTodo = () => {
     if (newTitle.trim() === "" || newDescription.trim() === "") {
       alert("Title or description cannot be empty.");
@@ -55,6 +60,7 @@ function App() {
       return;
     }
 
+    // Map through current todos to update the edited todo
     const updatedTodoArr = allTodos.map((todo, index) => {
       if (index === currentTodoIndex) {
         return { ...todo, title: newTitle, description: newDescription };
@@ -62,14 +68,18 @@ function App() {
       return todo;
     });
 
+    // Update state with edited todos
     setTodos(updatedTodoArr);
+    // Update local storage with edited todos
     localStorage.setItem("todolist", JSON.stringify(updatedTodoArr));
+    // Clear input fields and reset editing state
     setNewTitle("");
     setNewDescription("");
     setIsEditing(false);
     setCurrentTodoIndex(null);
   };
 
+  // Load todos from local storage on component mount
   useEffect(() => {
     const savedTodo = JSON.parse(localStorage.getItem("todolist"));
     if (savedTodo) {
@@ -77,23 +87,31 @@ function App() {
     }
   }, []);
 
+   // Function to handle deleting a todo
   const handleDeleteTodo = (index) => {
+     // Filter out the todo to be deleted based on index
     const updatedTodoArr = allTodos.filter((_, i) => i !== index);
     setTodos(updatedTodoArr);
+    // Update local storage after deletion
     localStorage.setItem("todolist", JSON.stringify(updatedTodoArr));
   };
 
+  // Function to handle toggling todo completion status
   const handleToggleComplete = (index) => {
+    // Map through todos to toggle completion status of the selected todo
     const updatedTodoArr = allTodos.map((todo, i) => {
       if (i === index) {
         return { ...todo, isCompleted: !todo.isCompleted };
       }
       return todo;
     });
+    // Update state with toggled todos
     setTodos(updatedTodoArr);
+    // Update local storage with toggled todos
     localStorage.setItem("todolist", JSON.stringify(updatedTodoArr));
   };
 
+  // Function to handle clicking edit button on a todo
   const handleEditClick = (index) => {
     setIsEditing(true);
     setCurrentTodoIndex(index);
@@ -101,6 +119,7 @@ function App() {
     setNewDescription(allTodos[index].description);
   };
 
+  // Render the application UI
   return (
     <>
       <h1>My Todos</h1>
